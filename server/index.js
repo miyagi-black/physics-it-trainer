@@ -10,11 +10,17 @@ app.use(cors());
 app.use(express.json());
 
 const pool = new Pool({
-  // ВАЖНО: Мы используем прямой хост и порт 5432, чтобы избежать проблем с пулером
-  connectionString: "postgresql://postgres:Hajimerecords14.@db.gnsqgnlgjhmshmxtyxui.supabase.co:5432/postgres",
+  // ВАЖНО: Мы добавляем ?sslmode=require в конец строки
+  connectionString: "postgresql://postgres.gnsqgnlgjhmshmxtyxui:Hajimerecords14.@aws-0-eu-central-1.pooler.supabase.com:5432/postgres?sslmode=require",
   ssl: {
     rejectUnauthorized: false
   }
+});
+
+// Простая проверка для терминала
+pool.query('SELECT 1', (err) => {
+  if (err) console.error('❌ Ошибка:', err.message);
+  else console.log('✅ БАЗА ПОДКЛЮЧЕНА. МОЖНО ОТДЫХАТЬ!');
 });
 
 // Добавим проверку, чтобы ты сразу видел успех в терминале
