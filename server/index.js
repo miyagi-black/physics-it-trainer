@@ -10,8 +10,8 @@ app.use(cors());
 app.use(express.json());
 
 const pool = new Pool({
-  // Удалили всё после слова /postgres
-  connectionString: "postgresql://postgres:Hajimerecords14.@aws-0-eu-central-1.pooler.supabase.com:6543/postgres",
+  // В логин добавлено .jslearn, а в конце порта — /postgres
+  connectionString: "postgresql://postgres.jslearn:Hajimerecords14.@aws-0-eu-central-1.pooler.supabase.com:6543/postgres",
   ssl: {
     rejectUnauthorized: false
   }
