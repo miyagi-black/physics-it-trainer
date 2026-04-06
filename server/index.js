@@ -10,11 +10,20 @@ app.use(cors());
 app.use(express.json());
 
 const pool = new Pool({
-  // Используем пулер и твой технический ID: gnsqgnlgjhmshmxtyxui
-  connectionString: "postgresql://postgres.gnsqgnlgjhmshmxtyxui:Hajimerecords14.@aws-0-eu-central-1.pooler.supabase.com:6543/postgres",
+  // ВАЖНО: Мы используем прямой хост и порт 5432, чтобы избежать проблем с пулером
+  connectionString: "postgresql://postgres:Hajimerecords14.@db.gnsqgnlgjhmshmxtyxui.supabase.co:5432/postgres",
   ssl: {
     rejectUnauthorized: false
   }
+});
+
+// Добавим проверку, чтобы ты сразу видел успех в терминале
+pool.connect((err, client, release) => {
+  if (err) {
+    return console.error('❌ Ошибка подключения к базе:', err.message);
+  }
+  console.log('✅ База данных подключена успешно! Можно защищать диплом.');
+  release();
 });
 
 // --- ПРОВЕРКА БАЗЫ ---
