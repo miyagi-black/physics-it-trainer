@@ -10,9 +10,10 @@ app.use(cors());
 app.use(express.json());
 
 const pool = new Pool({
-  connectionString: "postgresql://postgres:Hajimerecords14.@aws-0-eu-central-1.pooler.supabase.com:6543/postgres?sslmode=require",
+  // Удалили всё после слова /postgres
+  connectionString: "postgresql://postgres:Hajimerecords14.@aws-0-eu-central-1.pooler.supabase.com:6543/postgres",
   ssl: {
-    rejectUnauthorized: false // ЭТО САМАЯ ВАЖНАЯ СТРОЧКА
+    rejectUnauthorized: false
   }
 });
 
