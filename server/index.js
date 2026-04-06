@@ -1,3 +1,4 @@
+require('dns').setDefaultResultOrder('ipv4first');
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -9,8 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 const pool = new Pool({ 
-    connectionString: "postgresql://postgres:Hajimerecords14.@db.gnsqgnlgjhmshmxtyxui.supabase.co:5432/postgres",
-    ssl: { rejectUnauthorized: false }
+connectionString: "postgresql://postgres:Hajimerecords14.@aws-0-eu-central-1.pooler.supabase.com:6543/postgres?sslmode=require",    ssl: { rejectUnauthorized: false }
 });
 
 // --- ПРОВЕРКА БАЗЫ ---
@@ -154,6 +154,22 @@ app.get('/api/admin/stats', async (req, res) => {
         const result = await pool.query('SELECT username, xp, level, role FROM users ORDER BY xp DESC');
         res.json(result.rows);
     } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// --- ОБНОВЛЕНИЕ УРОКА ---
+app.put('/api/admin/lessons/:id', async (req, res) => {
+    const { id } = req.params;
+    const { title, task, check_logic, xp_reward } = req.body;
+    try {
+        const result = await pool.query(
+            'UPDATE lessons SET title = $1, task = $2, check_logic = $3, xp_reward = $4 WHERE id = $5 RETURNING *',
+            [title, task, check_logic, xp_reward, id]
+        );
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error("Ошибка при обновлении урока:", err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // --- ЗАПУСК СЕРВЕРА ---
